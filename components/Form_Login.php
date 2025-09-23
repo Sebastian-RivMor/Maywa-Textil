@@ -61,12 +61,25 @@
                    required
                    class="w-full rounded-full border border-purple-300 bg-white/90 pl-12 pr-12 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/70 focus:border-purple-500 text-lg" />
             <!-- icono ojo -->
-            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-purple-600">
-              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+            <button type="button"
+                    id="toggle-pass"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-purple-600
+                          transition transform duration-150 ease-out active:scale-95"
+                    aria-pressed="false" title="Mostrar contraseña">
+              <!-- eye (visible por defecto) -->
+              <svg id="icon-eye" class="h-6 w-6 block" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+                      d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
                 <circle cx="12" cy="12" r="3" stroke-width="1.7"/>
               </svg>
-            </span>
+              <!-- eye-off (oculto al inicio) -->
+              <svg id="icon-eye-off" class="h-6 w-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+                      d="M17.94 17.94A10.94 10.94 0 0112 19c-7 0-11-7-11-7a20.59 20.59 0 014.32-4.91M9.9 4.24A10.93 10.93 0 0112 5c7 0 11 7 11 7a20.66 20.66 0 01-3.62 4.35"/>
+                <path stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+                      d="M1 1l22 22"/>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -76,7 +89,8 @@
             <input type="checkbox" class="h-5 w-5 rounded border-purple-300 text-purple-600 focus:ring-purple-500">
             Recordarme
           </label>
-          <a href="/recuperar" class="text-gray-700 hover:text-purple-700 text-base">¿Olvidaste tu contraseña?</a>
+          <a href="../api/auth/forgot_password.php" class="text-gray-700 hover:text-purple-700 text-base">¿Olvidaste tu contraseña?</a>
+          <p class="text-sm mt-2">
         </div>
 
         <!-- Enlace a registro -->
@@ -132,4 +146,40 @@
       error.classList.remove('hidden');
     }
   });
+
+  (function () {
+    const input  = document.querySelector('input[name="contrasena"]');
+    const btn    = document.getElementById('toggle-pass');
+    if (!input || !btn) return;
+
+    const eye    = document.getElementById('icon-eye');
+    const eyeOff = document.getElementById('icon-eye-off');
+
+    const toggle = () => {
+      const showing = input.type === 'text';
+      // anima un poco
+      btn.classList.add('rotate-6');
+      setTimeout(() => btn.classList.remove('rotate-6'), 120);
+
+      if (showing) {
+        input.type = 'password';
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('title', 'Mostrar contraseña');
+        eye.classList.remove('hidden');   // eye on
+        eyeOff.classList.add('hidden');   // eye-off off
+      } else {
+        input.type = 'text';
+        btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('title', 'Ocultar contraseña');
+        eye.classList.add('hidden');      // eye off
+        eyeOff.classList.remove('hidden');// eye-off on
+      }
+    };
+
+    btn.addEventListener('click', toggle);
+    // Accesible por teclado cuando el input tiene foco (Alt+*)
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && input.type === 'text') toggle();
+    });
+  })();
 </script>

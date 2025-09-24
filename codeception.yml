@@ -1,0 +1,32 @@
+# namespace: Tests
+# support_namespace: Support
+# paths:
+#     tests: tests
+#     output: tests/_output
+#     data: tests/Support/Data
+#     support: tests/Support
+#     envs: tests/_envs
+# actor_suffix: Tester
+# extensions:
+#     enabled:
+#         - Codeception\Extension\RunFailed
+
+
+# namespace: Tests\Support
+# paths:
+#   tests: tests
+#   output: tests/_output
+#   data: tests/_data
+#   support: tests/Support
+# settings:
+#   shuffle: false
+#   lint: true
+# actor_suffix: Tester
+
+namespace: Tests\Support
+paths:
+  tests: tests
+  output: tests/_output
+  data: tests/_data
+  support: tests/Support
+actor_suffix: Tester

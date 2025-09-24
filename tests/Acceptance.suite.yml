@@ -1,0 +1,61 @@
+# Codeception Acceptance Test Suite Configuration
+#
+# Perform tests in a browser by either emulating one using PhpBrowser, or in a real browser using WebDriver.
+# If you need both WebDriver and PhpBrowser tests, create a separate suite for each.
+
+# actor: AcceptanceTester
+# modules:
+#     enabled:
+#         - PhpBrowser:
+#             url: http://localhost/myapp
+# # Add Codeception\Step\Retry trait to AcceptanceTester to enable retries
+# step_decorators:
+#     - Codeception\Step\ConditionalAssertion
+#     - Codeception\Step\TryTo
+#     - Codeception\Step\Retry
+
+# actor: AcceptanceTester
+# modules:
+#   enabled:
+#     - PhpBrowser:
+#         url: 'http://localhost/MaywaTextil/public/'
+#     - REST:
+#         depends: PhpBrowser
+#     - Db:
+#         dsn: 'mysql:host=127.0.0.1;dbname=bd_maywa_test'   # <-- usa tu BD de PRUEBAS
+#         user: 'root'
+#         password: ''
+#         populate: false
+#         cleanup: true
+#     - \Helper\Acceptance
+
+# actor: AcceptanceTester
+# modules:
+#   enabled:
+#     - PhpBrowser:
+#         url: 'http://localhost/MaywaTextil/'
+#     - REST:
+#         depends: PhpBrowser
+#     # (opcional) si vas a insertar datos de prueba:
+#     # - Db:
+#     #     dsn: 'mysql:host=127.0.0.1;dbname=maywa_test'
+#     #     user: 'root'
+#     #     password: ''
+#     #     populate: false
+#     #     cleanup: true
+#     # - \Helper\Acceptance
+#     # - tests\Support\Helper\Acceptance
+
+actor: AcceptanceTester
+modules:
+  enabled:
+    - PhpBrowser:
+        url: 'http://localhost/MaywaTextil/'
+    - REST:
+        depends: PhpBrowser
+    - Db:
+        dsn: 'mysql:host=127.0.0.1;dbname=bd_maywa_test'  # usa TU BD DE PRUEBAS
+        user: 'root'
+        password: ''
+        populate: false
+        cleanup: true

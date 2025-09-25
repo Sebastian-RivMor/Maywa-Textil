@@ -2,8 +2,8 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-// $dbname = "bd_maywa";
-$dbname = "bd_maywa_test";
+$dbname = "bd_maywa";
+// $dbname = "bd_maywa_test";
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);

@@ -8,8 +8,8 @@ function build_mailer(): PHPMailer {
   $mail->Host       = 'smtp.gmail.com';
   $mail->SMTPAuth   = true;
   $mail->Username   = 'satorugojo0123456789@gmail.com';
-  $mail->Password   = 'czfg nszk dmxo bfxt'; // <- pega la de 16 caracteres
-  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     // 587
+  $mail->Password   = 'czfg nszk dmxo bfxt';
+  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
   $mail->Port       = 587;
 
   $mail->setFrom('satorugojo0123456789@gmail.com', 'Maywa Textil');

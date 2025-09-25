@@ -21,6 +21,8 @@
         "codeception/module-db": "^3.2"
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "test:md": "codecept run Acceptance --xml=tests/_output/report.xml && php tools/junit_to_md.php tests/_output/report.xml tests/_output/report.md"
     }
+
 }

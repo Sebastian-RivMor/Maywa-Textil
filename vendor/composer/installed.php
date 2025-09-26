@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '6cf6b54275179fcc3119b0e0f15eab5e14c5cc45',
+        'reference' => 'b0952db970bb703cac8ab798db8d4bc0839c6b8c',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '6cf6b54275179fcc3119b0e0f15eab5e14c5cc45',
+            'reference' => 'b0952db970bb703cac8ab798db8d4bc0839c6b8c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -687,6 +687,15 @@
             'install_path' => __DIR__ . '/../theseer/tokenizer',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'twilio/sdk' => array(
+            'pretty_version' => '8.8.2',
+            'version' => '8.8.2.0',
+            'reference' => '9f646ca53a4645ed6f2117616b8a1b8a29149ce0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../twilio/sdk',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
     ),
 );

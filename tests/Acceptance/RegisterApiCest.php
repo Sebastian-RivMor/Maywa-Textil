@@ -10,8 +10,8 @@ final class RegisterApiCest
     private array $payload = [
         'nombre'       => 'Juan',
         'apellido'     => 'Pérez',
-        'dni'          => '87654321',
-        'telefono'     => '999000111',
+        'dni'          => '87659321',
+        'telefono'     => '999000311',
         'sexo'         => 'M',
         'id_provincia' => 1,
         'correo'       => 'juan.prueba@example.com',

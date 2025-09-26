@@ -1,0 +1,9 @@
+# Archivo con datos sensibles
+api/reset_numero/send_otp.php
+
+# Otros archivos sensibles que podrían aparecer
+*.env
+*.env.local
+*.env.production
+config/database.php
+config/config.php

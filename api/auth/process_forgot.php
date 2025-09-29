@@ -3,7 +3,8 @@ require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/mailer.php';
 
 $correo  = isset($_POST['correo']) ? trim($_POST['correo']) : '';
-$generic = 'Si el correo existe, te enviaremos un enlace para restablecer tu contraseña.';
+header("Location: success.php?msg=" . urlencode($generic));
+exit;
 
 if ($correo === '') { exit($generic); }
 

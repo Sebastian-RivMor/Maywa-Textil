@@ -1,5 +1,4 @@
 <?php
-// index.php dentro de /public
 
 $page = $_GET['page'] ?? 'home';
 $file = __DIR__ . '/../pages/' . $page . '.php';
@@ -21,7 +20,7 @@ include $file;
 $content = ob_get_clean();
 
 // Definimos título dinámico
-$title = ucfirst($page) . " - Mi Proyecto";
+$title = ucfirst($page) . " - MAYWA";
 
 // Si la página definió un layout, usamos ese, si no, main.php por defecto
 $layout = $layout ?? 'main.php';

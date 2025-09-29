@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Limpia códigos usados
         $pdo->prepare("DELETE FROM otp_resets WHERE id_usuario = ?")->execute([$id_usuario]);
 
-        echo "✅ Contraseña actualizada con éxito. <a href='login.php' class='text-blue-600 underline'>Iniciar sesión</a>";
+        echo "✅ Contraseña actualizada con éxito. <a href='/MAYWATEXTIL/public/index.php?page=sesion' class='text-blue-600 underline'>Iniciar sesión</a>";
     } else {
         echo "❌ Datos incompletos.";
     }

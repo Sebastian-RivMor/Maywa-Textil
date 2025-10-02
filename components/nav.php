@@ -14,8 +14,8 @@
       <div class="hidden md:flex items-center gap-8">
         <a href="/categorias" class="nav-link">Categorías</a>
         <a href="/productos" class="nav-link">Productos</a>
-        <a href="/conoce" class="nav-link">Conoce</a>
-        <a href="/nosotros" class="nav-link">Quiénes Somos</a>
+        <a href="index.php?page=conoce" class="nav-link">Conoce</a>
+        <a href="index.php?page=somos" class="nav-link">Quiénes Somos</a>
       </div>
 
       <!-- Sección derecha -->

@@ -136,7 +136,7 @@
       const data = await res.json();
 
       if (data && data.success) {
-        window.location.replace('index.php?page=home');
+        window.location.replace(data.redirect); // usa lo que mande el backend
       } else {
         error.textContent = (data && data.error) || 'No se pudo iniciar sesión.';
         error.classList.remove('hidden');

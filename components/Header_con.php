@@ -5,7 +5,7 @@
     <span class="bg-[#C77DFF] text-white px-4 py-1 rounded-full text-sm mb-2 font-medium">
       Huancavelica • Acompañamiento de CITE Textil Camélidos (ITP)
     </span>
-    <h1 class="text-4xl font-extrabold leading-tight">
+    <h1 class="text-8xl font-extrabold leading-tight">
       Conoce <span class="text-[#C77DFF]">nuestras</span><br> Comunidades
     </h1>
   </div>

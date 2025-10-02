@@ -5,7 +5,7 @@
     <span class="bg-[#C77DFF] text-white px-4 py-1 rounded-full text-sm mb-2 font-medium">
             Hecho a mano en los Andes
     </span>
-    <h1 class="text-4xl font-extrabold leading-tight">
+    <h1 class="text-9xl font-extrabold leading-tight">
       Quienes <span class="text-[#C77DFF]">somos</span><br>
     </h1>
   </div>

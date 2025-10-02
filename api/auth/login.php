@@ -42,6 +42,24 @@ try {
     // Asegurar nueva id de sesión al iniciar sesión
     session_regenerate_id(true);
 
+    // // Guardar datos mínimos en sesión
+    // $_SESSION['usuario'] = [
+    //     "id"       => (int)$usuario['id_usuario'],
+    //     "nombre"   => $usuario['nombre'],
+    //     "apellido" => $usuario['apellido'],
+    //     "correo"   => $usuario['correo'],
+    //     "rol"      => ((int)$usuario['id_rol'] === 1 ? "Admin" : "Cliente")
+    // ];
+
+    // echo json_encode([
+    //     "success"  => true,
+    //     "message"  => "Inicio de sesión exitoso",
+    //     "usuario"  => $_SESSION['usuario'],
+    //     // Puedes aprovechar y mandar la URL de redirección sugerida:
+    //     "redirect" => "/MAYWATEXTIL/index.php?page=home"
+    // ]);
+    // exit;
+
     // Guardar datos mínimos en sesión
     $_SESSION['usuario'] = [
         "id"       => (int)$usuario['id_usuario'],
@@ -51,12 +69,16 @@ try {
         "rol"      => ((int)$usuario['id_rol'] === 1 ? "Admin" : "Cliente")
     ];
 
+    // Redirección según rol
+    $redirect = ($_SESSION['usuario']['rol'] === "Admin")
+        ? "/MAYWATEXTIL/admin/dashboard.php"
+        : "/MAYWATEXTIL/public/index.php?page=home";
+
     echo json_encode([
         "success"  => true,
         "message"  => "Inicio de sesión exitoso",
         "usuario"  => $_SESSION['usuario'],
-        // Puedes aprovechar y mandar la URL de redirección sugerida:
-        "redirect" => "/MAYWATEXTIL/index.php?page=home"
+        "redirect" => $redirect
     ]);
     exit;
 

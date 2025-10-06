@@ -49,26 +49,16 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
                 <i class="fas fa-tachometer-alt mr-3"></i>
                 Dashboard
             </a>
+            <a href="/MAYWATEXTIL/admin/comunidad.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-table mr-3"></i>
+                Comunidad
+            </a>
             <a href="/MAYWATEXTIL/admin/producto.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-sticky-note mr-3"></i>
                 Añadir Producto
             </a>
-            <a href="tables.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-table mr-3"></i>
-                Tables
-            </a>
-            <a href="forms.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-align-left mr-3"></i>
-                Forms
-            </a>
-            <a href="tabs.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-tablet-alt mr-3"></i>
-                Tabbed Content
-            </a>
-            <a href="calendar.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-calendar mr-3"></i>
-                Calendar
-            </a>
+            
+            
         </nav>
     </aside>
 
@@ -87,111 +77,83 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
             </div>
         </header>
         <!-- Contenido principal -->
-        <div class="w-full p-6 bg-gray-100 h-full overflow-y-auto" x-data="{ openModal: false }">
+        <div class="w-full p-6 bg-gray-100 h-full overflow-y-auto"
+            x-data="productoManager()"
+            x-init="init()">
 
-            <!-- Botón Agregar Producto -->
+            <!-- Botón -->
             <div class="flex justify-end mb-6">
                 <button @click="openModal = true"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg">
-                + Agregar Producto
+                + Añadir Producto
                 </button>
             </div>
-
-            <!-- Modal -->
-            <div x-show="openModal"
-                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <!-- Modal de edición -->
+            <div x-show="openEditModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-xl shadow-lg w-full max-w-3xl p-6 relative overflow-y-auto max-h-[90vh]"
-                @click.away="openModal = false" x-transition>
-                
-                <!-- Header -->
+                @click.away="openEditModal = false" x-transition>
                 <div class="flex justify-between items-center border-b pb-3 mb-4">
-                <h2 class="text-lg font-bold text-gray-700">Añadir Producto</h2>
-                <button @click="openModal = false" class="text-gray-500 hover:text-gray-700 text-lg">&times;</button>
+                <h2 class="text-lg font-bold text-gray-700">Modificar Producto</h2>
+                <button @click="openEditModal = false" class="text-gray-500 hover:text-gray-700 text-lg">&times;</button>
                 </div>
 
-                <!-- Formulario (distribuido en 2 columnas) -->
-                <form action="/MAYWATEXTIL/admin/guardar_producto.php" method="POST" enctype="multipart/form-data"
-                    class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-
-                <!-- ID (readonly) -->
+                <form @submit.prevent="actualizarProducto" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <!-- ID -->
                 <div>
-                    <label class="block font-semibold text-gray-600">ID</label>
-                    <input type="text" value="Auto" readonly
-                        class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-500">
+                    <label class="block font-semibold text-gray-600">ID Producto</label>
+                    <input type="text" x-model="editForm.id_producto" class="w-full border rounded-lg px-3 py-2 bg-gray-100" readonly>
                 </div>
 
                 <!-- Nombre -->
                 <div>
                     <label class="block font-semibold text-gray-600">Nombre</label>
-                    <input type="text" name="nombre"
-                        class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200" required>
+                    <input type="text" x-model="editForm.nombre_producto" class="w-full border rounded-lg px-3 py-2" required>
                 </div>
 
-                <!-- Descripción previa -->
+                <!-- Descripción corta -->
                 <div class="md:col-span-2">
-                    <label class="block font-semibold text-gray-600">Descripción previa</label>
-                    <textarea name="descripcion_previa" rows="2"
-                            class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 resize-none" required></textarea>
+                    <label class="block font-semibold text-gray-600">Descripción corta</label>
+                    <textarea x-model="editForm.descripcion_corta" rows="2" class="w-full border rounded-lg px-3 py-2" required></textarea>
                 </div>
 
                 <!-- Descripción completa -->
                 <div class="md:col-span-2">
                     <label class="block font-semibold text-gray-600">Descripción completa</label>
-                    <textarea name="descripcion_completa" rows="3"
-                            class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 resize-none" required></textarea>
-                </div>
-
-                <!-- Tipo de producto -->
-                <div>
-                    <label class="block font-semibold text-gray-600">Tipo</label>
-                    <select name="tipo" class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200" required>
-                    <option value="">Seleccionar...</option>
-                    <option value="chompas">Chompas</option>
-                    <option value="ponchos">Ponchos</option>
-                    <option value="bufandas">Bufandas</option>
-                    <option value="casacas">Casacas</option>
-                    </select>
+                    <textarea x-model="editForm.descripcion_producto" rows="3" class="w-full border rounded-lg px-3 py-2" required></textarea>
                 </div>
 
                 <!-- Precio -->
                 <div>
                     <label class="block font-semibold text-gray-600">Precio (S/.)</label>
-                    <input type="number" name="precio" step="0.01"
-                        class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200" required>
-                </div>
-
-                <!-- Material -->
-                <div>
-                    <label class="block font-semibold text-gray-600">Material</label>
-                    <select name="material" class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200" required>
-                    <option value="">Seleccionar...</option>
-                    <option value="lana">Lana</option>
-                    <option value="alpaca">Alpaca</option>
-                    <option value="seda">Seda</option>
-                    <option value="oveja">Oveja</option>
-                    </select>
+                    <input type="number" step="0.01" x-model="editForm.precio" class="w-full border rounded-lg px-3 py-2" required>
                 </div>
 
                 <!-- Stock -->
                 <div>
                     <label class="block font-semibold text-gray-600">Stock</label>
-                    <input type="number" name="stock" min="0"
-                        class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200" required>
+                    <input type="number" x-model="editForm.stock" class="w-full border rounded-lg px-3 py-2" required>
                 </div>
 
-                <!-- Imágenes -->
+                <!-- Estado -->
+                <div>
+                    <label class="block font-semibold text-gray-600">Estado</label>
+                    <select x-model="editForm.estado_producto" class="w-full border rounded-lg px-3 py-2">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Agotado">Agotado</option>
+                    </select>
+                </div>
+
+                <!-- Imagen -->
                 <div class="md:col-span-2">
-                    <label class="block font-semibold text-gray-600">Imágenes del producto</label>
-                    <input type="file" name="imagenes[]" multiple accept="image/*"
-                        class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200" required>
-                    <p class="text-xs text-gray-500 mt-1">Mínimo 3 imágenes (1 principal + 2 adicionales)</p>
+                    <label class="block font-semibold text-gray-600">Actualizar Imagen (opcional)</label>
+                    <input type="file" @change="editForm.imagen = $event.target.files[0]" accept="image/*" class="w-full border rounded-lg px-3 py-2">
                 </div>
 
-                <!-- Botón añadir -->
                 <div class="md:col-span-2 flex justify-end mt-2">
                     <button type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md">
-                    Añadir Producto
+                    class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md">
+                    Guardar Cambios
                     </button>
                 </div>
                 </form>
@@ -199,33 +161,321 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
             </div>
 
 
-            <!-- Tabla de productos -->
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                <table class="w-full table-auto text-left border-collapse">
+            <!-- Modal -->
+            <div x-show="openModal"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-xl shadow-lg w-full max-w-3xl p-6 relative overflow-y-auto max-h-[90vh]"
+                    @click.away="openModal = false" x-transition>
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <h2 class="text-lg font-bold text-gray-700">Añadir Producto</h2>
+                    <button @click="openModal = false" class="text-gray-500 hover:text-gray-700 text-lg">&times;</button>
+                </div>
+
+                <form @submit.prevent="agregarProducto" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                    <!-- Comunidad -->
+                    <div>
+                    <label class="block font-semibold text-gray-600">Comunidad</label>
+                    <select x-model="id_comunidad"
+                            class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200"
+                            required>
+                        <option value="">Seleccionar...</option>
+                        <template x-for="c in comunidades" :key="c.id_comunidad">
+                        <option :value="c.id_comunidad" x-text="c.nombre_comunidad"></option>
+                        </template>
+                    </select>
+                    </div>
+
+                        <!-- Categoría -->
+                        <div>
+                        <label class="block font-semibold text-gray-600">Categoría</label>
+                        <select x-model="id_categoria"
+                                class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200"
+                                required>
+                            <option value="">Seleccionar...</option>
+                            <template x-for="cat in categorias" :key="cat.id_categoria">
+                            <option :value="cat.id_categoria" x-text="cat.nombre_categoria"></option>
+                            </template>
+                        </select>
+                        </div>
+
+                        <!-- Material -->
+                        <div>
+                        <label class="block font-semibold text-gray-600">Material</label>
+                        <select x-model="id_material"
+                                class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200"
+                                required>
+                            <option value="">Seleccionar...</option>
+                            <template x-for="m in materiales" :key="m.id_material">
+                            <option :value="m.id_material" x-text="m.nombre_material"></option>
+                            </template>
+                        </select>
+                    </div>
+
+
+                    <!-- Nombre -->
+                    <div>
+                    <label class="block font-semibold text-gray-600">Nombre</label>
+                    <input type="text" x-model="nombre" class="w-full border rounded-lg px-3 py-2" required>
+                    </div>
+
+                    <!-- Descripción corta -->
+                    <div class="md:col-span-2">
+                    <label class="block font-semibold text-gray-600">Descripción corta</label>
+                    <textarea x-model="descripcion_corta" rows="2" class="w-full border rounded-lg px-3 py-2" required></textarea>
+                    </div>
+
+                    <!-- Descripción completa -->
+                    <div class="md:col-span-2">
+                    <label class="block font-semibold text-gray-600">Descripción completa</label>
+                    <textarea x-model="descripcion_completa" rows="3" class="w-full border rounded-lg px-3 py-2" required></textarea>
+                    </div>
+
+                    <!-- Precio -->
+                    <div>
+                    <label class="block font-semibold text-gray-600">Precio (S/.)</label>
+                    <input type="number" x-model="precio" step="0.01" class="w-full border rounded-lg px-3 py-2" required>
+                    </div>
+
+                    <!-- Stock -->
+                    <div>
+                    <label class="block font-semibold text-gray-600">Stock</label>
+                    <input type="number" x-model="stock" class="w-full border rounded-lg px-3 py-2" required>
+                    </div>
+
+                    <!-- Imagen -->
+                    <div class="md:col-span-2">
+                    <label class="block font-semibold text-gray-600">Imagen principal</label>
+                    <input type="file" @change="imagen = $event.target.files[0]" accept="image/*" class="w-full border rounded-lg px-3 py-2">
+                    </div>
+
+                    <div class="md:col-span-2 flex justify-end mt-2">
+                    <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md">
+                        Guardar Producto
+                    </button>
+                    </div>
+                </form>
+                </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden mt-6">
+            <table class="w-full table-auto text-left border-collapse">
                 <thead>
-                    <tr class="bg-gray-200 text-gray-700 text-sm uppercase">
-                    <th class="px-4 py-3">ID Producto</th>
+                <tr class="bg-gray-200 text-gray-700 text-sm uppercase">
+                    <th class="px-4 py-3">ID</th>
                     <th class="px-4 py-3">Nombre</th>
-                    <th class="px-4 py-3">Categoría</th>
+                    <th class="px-4 py-3">Descripción</th>
                     <th class="px-4 py-3">Precio</th>
-                    <th class="px-4 py-3">Material</th>
                     <th class="px-4 py-3">Stock</th>
-                    </tr>
+                    <th class="px-4 py-3">Estado</th>
+                    <th class="px-4 py-3 text-center">Acciones</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <!-- Ejemplo de fila -->
+                <template x-for="p in productos" :key="p.id_producto">
                     <tr class="border-b hover:bg-gray-100">
-                    <td class="px-4 py-3">1</td>
-                    <td class="px-4 py-3">Chalina Andina</td>
-                    <td class="px-4 py-3">Bufandas</td>
-                    <td class="px-4 py-3">S/. 189.00</td>
-                    <td class="px-4 py-3">Alpaca</td>
-                    <td class="px-4 py-3">50</td>
+                    <td class="px-4 py-3" x-text="p.id_producto"></td>
+                    <td class="px-4 py-3" x-text="p.nombre_producto"></td>
+                    <td class="px-4 py-3" x-text="p.descripcion_corta"></td>
+                    <td class="px-4 py-3" x-text="`S/. ${p.precio}`"></td>
+                    <td class="px-4 py-3" x-text="p.stock"></td>
+                    <td class="px-4 py-3" x-text="p.estado_producto"></td>
+                    <td class="px-4 py-3 text-center space-x-2">
+                        <button 
+                        @click="abrirModalEdicion(p)"
+                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                        Modificar
+                        </button>
+                        <button 
+                        @click="eliminarProducto(p.id_producto)"
+                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                        Eliminar
+                        </button>
+                    </td>
                     </tr>
+                </template>
                 </tbody>
-                </table>
+            </table>
             </div>
+
         </div>
     </div>
+    <script>
+    function productoManager() {
+    return {
+        // 🔹 Variables de control de modales
+        openModal: false,
+        openEditModal: false,
+
+        // 🔹 Listas de datos
+        comunidades: [],
+        categorias: [],
+        materiales: [],
+        productos: [],
+
+        // 🔹 Campos del formulario de registro
+        id_comunidad: '',
+        id_categoria: '',
+        id_material: '',
+        nombre: '',
+        descripcion_corta: '',
+        descripcion_completa: '',
+        precio: '',
+        stock: '',
+        imagen: null,
+
+        // 🔹 Formulario de edición
+        editForm: {
+        id_producto: '',
+        nombre_producto: '',
+        descripcion_corta: '',
+        descripcion_producto: '',
+        precio: '',
+        stock: '',
+        estado_producto: '',
+        imagen: null
+        },
+
+        // ======================================================
+        // Inicialización
+        // ======================================================
+        init() {
+        this.cargarListas();
+        this.cargarProductos();
+        },
+
+        // ======================================================
+        // Cargar listas de comunidad, categoría y material
+        // ======================================================
+        cargarListas() {
+        Promise.all([
+            fetch('/MAYWATEXTIL/api/admin/comunidad/get_comunidades.php').then(r => r.json()),
+            fetch('/MAYWATEXTIL/api/admin/categoria/get_categorias.php').then(r => r.json()),
+            fetch('/MAYWATEXTIL/api/admin/material/get_materiales.php').then(r => r.json())
+        ])
+        .then(([coms, cats, mats]) => {
+            const toArray = (x) => Array.isArray(x) ? x : (x?.data ?? x?.rows ?? []);
+            this.comunidades = toArray(coms);
+            this.categorias  = toArray(cats);
+            this.materiales  = toArray(mats);
+            console.log('Listas cargadas:', this.comunidades, this.categorias, this.materiales);
+        })
+        .catch(err => console.error('Error cargando listas:', err));
+        },
+
+        // ======================================================
+        // Cargar productos desde el backend
+        // ======================================================
+        cargarProductos() {
+        fetch('/MAYWATEXTIL/api/admin/productos/get_producto.php')
+            .then(r => r.json())
+            .then(data => {
+            console.log('Productos cargados:', data);
+            this.productos.splice(0, this.productos.length, ...data); // Alpine v2 FIX
+            })
+            .catch(err => console.error('Error cargando productos:', err));
+        },
+
+        // ======================================================
+        // Agregar producto nuevo
+        // ======================================================
+        agregarProducto() {
+        const form = new FormData();
+        form.append('id_comunidad', this.id_comunidad);
+        form.append('id_categoria', this.id_categoria);
+        form.append('id_material', this.id_material);
+        form.append('nombre', this.nombre);
+        form.append('descripcion_previa', this.descripcion_corta);
+        form.append('descripcion_completa', this.descripcion_completa);
+        form.append('precio', this.precio);
+        form.append('stock', this.stock);
+        if (this.imagen) form.append('imagenes[]', this.imagen);
+
+        fetch('/MAYWATEXTIL/api/admin/productos/add_producto.php', {
+            method: 'POST',
+            body: form
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+            alert('Producto añadido correctamente');
+            this.openModal = false;
+            this.cargarProductos();
+            } else {
+            alert(data.error || 'Error al guardar producto');
+            }
+        })
+        .catch(err => console.error('Error al enviar producto:', err));
+        },
+
+        // ======================================================
+        // Abrir modal de edición
+        // ======================================================
+        abrirModalEdicion(p) {
+        this.editForm = { ...p };
+        this.editForm.imagen = null;
+        this.openEditModal = true;
+        },
+
+        // ======================================================
+        // Actualizar producto existente
+        // ======================================================
+        actualizarProducto() {
+        const form = new FormData();
+        form.append('id_producto', this.editForm.id_producto);
+        form.append('nombre_producto', this.editForm.nombre_producto);
+        form.append('descripcion_corta', this.editForm.descripcion_corta);
+        form.append('descripcion_producto', this.editForm.descripcion_producto);
+        form.append('precio', this.editForm.precio);
+        form.append('stock', this.editForm.stock);
+        form.append('estado_producto', this.editForm.estado_producto);
+        if (this.editForm.imagen) form.append('imagen', this.editForm.imagen);
+
+        fetch('/MAYWATEXTIL/api/admin/productos/update_producto.php', {
+            method: 'POST',
+            body: form
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+            alert('Producto actualizado correctamente');
+            this.openEditModal = false;
+            this.cargarProductos();
+            } else {
+            alert(data.error || 'Error al actualizar producto');
+            }
+        })
+        .catch(err => console.error('Error al actualizar producto:', err));
+        },
+
+        // ======================================================
+        // Eliminar producto
+        // ======================================================
+        eliminarProducto(id) {
+        if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
+
+        fetch('/MAYWATEXTIL/api/admin/productos/delete_producto.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `id_producto=${id}`
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+            alert('Producto eliminado correctamente');
+            this.cargarProductos();
+            } else {
+            alert(data.error || 'Error al eliminar producto');
+            }
+        })
+        .catch(err => console.error('Error al eliminar producto:', err));
+        }
+    };
+    }
+    </script>
+
 </body>
 </html>
+

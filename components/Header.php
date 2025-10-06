@@ -20,7 +20,7 @@
           </p>
 
           <div class="mt-6">
-            <a href="/productos"
+            <a href="/MAYWATEXTIL/public/index.php?page=productos"
                class="inline-flex items-center rounded-full bg-[#9F51FF] hover:bg-[#7857A9] text-white px-6 py-3 text-base font-semibold shadow-md transition">
               Ver productos →
             </a>

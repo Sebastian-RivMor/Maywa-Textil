@@ -37,20 +37,31 @@ try {
 
     // Subir imagen si existe
     $foto_url = '';
-    if (!empty($_FILES['imagenes']['name'][0])) {
-        $uploadDir = __DIR__ . '/../../../../uploads/productos/';
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
+    if (!empty($_FILES['imagenes']['name'][0])) {
+
+        // 📁 Ruta física donde se guardará la imagen
+        $uploadDir = __DIR__ . '/../../../public/assets/uploads/productos/';
+
+        // Si no existe la carpeta, se crea
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        // Nombre temporal y destino final
         $tmpName = $_FILES['imagenes']['tmp_name'][0];
         $fileName = time() . '_' . basename($_FILES['imagenes']['name'][0]);
         $targetFile = $uploadDir . $fileName;
 
+        // Mover la imagen subida al directorio público
         if (move_uploaded_file($tmpName, $targetFile)) {
-            $foto_url = '/MAYWATEXTIL/uploads/productos/' . $fileName;
+            // ✅ Ruta accesible públicamente (para mostrar en el navegador)
+            $foto_url = '/MAYWATEXTIL/public/assets/uploads/productos/' . $fileName;
         } else {
-            throw new Exception("Error al subir la imagen.");
+            throw new Exception("Error al mover la imagen al directorio destino.");
         }
-    }
+}
+
 
     // Consulta SQL con PDO
     $sql = "INSERT INTO tb_producto 

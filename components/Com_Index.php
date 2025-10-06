@@ -7,7 +7,7 @@
         Conoce a las comunidades participativas
       </h2>
 
-      <a href="/categorias"
+      <a href="/MAYWATEXTIL/public/index.php?page=conoce"
          class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium text-white ring-1 ring-[#C2B7DF] hover:bg-[#E8C1FF]/30">
         Ver Todo →
       </a>

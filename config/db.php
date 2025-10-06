@@ -2,7 +2,8 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$dbname = "bd_maywa";
+$dbname = "bd_maywa1";
+// $dbname = "bd_maywa";
 // $dbname = "bd_maywa_test";
 
 try {

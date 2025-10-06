@@ -7,12 +7,12 @@ function build_mailer(): PHPMailer {
   $mail->isSMTP();
   $mail->Host       = 'smtp.gmail.com';
   $mail->SMTPAuth   = true;
-  $mail->Username   = 'satorugojo0123456789@gmail.com';
-  $mail->Password   = 'czfg nszk dmxo bfxt';
+  $mail->Username   = 'maywa.textil@gmail.com';
+  $mail->Password   = 'auqs nsxw qtmn awnp';
   $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
   $mail->Port       = 587;
 
-  $mail->setFrom('satorugojo0123456789@gmail.com', 'Maywa Textil');
+  $mail->setFrom('maywa.textil@gmail.com', 'Maywa Textil');
   $mail->CharSet = 'UTF-8';
   return $mail;
 }

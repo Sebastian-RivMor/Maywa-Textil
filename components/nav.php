@@ -20,17 +20,21 @@
 
       <!-- Sección derecha -->
       <div class="hidden md:flex items-center gap-3">
-        <?php if (isset($_SESSION['usuario'])): ?>
+        <?php if (isset($_SESSION['usuario'])): $u=$_SESSION['usuario']; ?>
           <!-- Usuario logueado -->
           <div class="relative">
             <button id="userMenuBtn" class="flex items-center gap-2 rounded-3xl px-4 py-2 bg-[#9d4edd] hover:bg-[#b368ff] text-white font-semibold">
-              <?= htmlspecialchars($_SESSION['usuario']['nombre']) ?>
+              <!-- Inicial -->
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/20 text-white font-bold">
+                <?= htmlspecialchars(strtoupper(substr($u['nombre'] ?? 'U', 0, 1))) ?>
+              </span>
+              <?= htmlspecialchars($u['nombre']) ?>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
               </svg>
             </button>
             <!-- Dropdown -->
-            <div id="userMenu" class="absolute right-0 mt-2 hidden bg-white text-gray-800 rounded-lg shadow-lg w-40">
+            <div id="userMenu" class="absolute right-0 mt-2 hidden bg-white text-gray-800 rounded-lg shadow-lg w-40 overflow-hidden">
               <a href="/MAYWATEXTIL/api/auth/logout.php" class="block px-4 py-2 hover:bg-gray-100">Cerrar Sesión</a>
             </div>
           </div>
@@ -51,14 +55,17 @@
 </nav>
 
 <script>
-  // Toggle menú usuario
+  // Toggle y cierre del menú usuario
   document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("userMenuBtn");
+    const btn  = document.getElementById("userMenuBtn");
     const menu = document.getElementById("userMenu");
-    if(btn && menu){
-      btn.addEventListener("click", () => {
-        menu.classList.toggle("hidden");
-      });
-    }
+    if(!btn || !menu) return;
+
+    const toggle = () => menu.classList.toggle("hidden");
+    const close  = () => menu.classList.add("hidden");
+
+    btn.addEventListener("click", (e) => { e.stopPropagation(); toggle(); });
+    document.addEventListener("click", () => close());
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
   });
 </script>

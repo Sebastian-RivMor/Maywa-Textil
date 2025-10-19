@@ -73,9 +73,33 @@
           <p class="text-sm font-semibold">Total:</p>
           <p class="text-lg font-bold text-[#C77DFF]">S/. <span x-text="total()"></span></p>
         </div>
-        <button class="w-full py-2 rounded-full bg-[#9D4EDD] hover:bg-[#7b3fc4] font-semibold text-sm transition">
-          Finalizar compra
-        </button>
+          <?php if (isset($_SESSION['usuario'])): ?>
+          <!-- Usuario con sesión iniciada -->
+          <button
+            @click="async () => {
+              try {
+                await fetch('/MAYWATEXTIL/api/cart/sync.php', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ cart: cart })
+                });
+                window.location.href = 'index.php?page=checkout';
+              } catch (err) {
+                console.error('Error al sincronizar carrito:', err);
+              }
+            }"
+            class="w-full py-2 rounded-full bg-[#9D4EDD] hover:bg-[#7b3fc4] font-semibold text-sm text-center text-white transition">
+            Finalizar compra
+          </button>
+        <?php else: ?>
+          <!-- Usuario sin sesión -->
+          <a href="index.php?page=sesion"
+            class="block w-full py-2 rounded-full bg-[#9D4EDD] hover:bg-[#7b3fc4] 
+                    font-semibold text-sm text-center text-white transition">
+            Finalizar compra
+          </a>
+        <?php endif; ?>
+
       </div>
     </template>
   </div>

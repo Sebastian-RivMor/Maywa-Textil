@@ -1,4 +1,9 @@
-<?php session_start(); ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <nav class="relative z-50 w-full text-white rounded-none"
      style="background:linear-gradient(to right,#0F0423,#46386F);border-bottom:1px solid #6A386B;">
 

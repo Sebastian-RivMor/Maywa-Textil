@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
     <title>Tailwind Admin Template</title>
     <meta name="author" content="David Grzyb">
     <meta name="description" content="">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Tailwind -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
@@ -50,6 +50,10 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
                 <i class="fas fa-sticky-note mr-3"></i>
                 Añadir Producto
             </a>
+            <a href="/MAYWATEXTIL/admin/pedidos.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-sticky-note mr-3"></i>
+                Pedidos
+            </a>
             
             
         </nav>
@@ -72,102 +76,51 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
 
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
-            <main class="w-full flex-grow p-6">
-                <h1 class="text-3xl text-black pb-6">Dashboard</h1>
-    
-                <div class="flex flex-wrap mt-6">
-                    <div class="w-full lg:w-1/2 pr-0 lg:pr-2">
-                        <p class="text-xl pb-3 flex items-center">
-                            <i class="fas fa-plus mr-3"></i> Monthly Reports
-                        </p>
-                        <div class="p-6 bg-white">
-                            <canvas id="chartOne" width="400" height="200"></canvas>
-                        </div>
+            <main class="flex-1 p-8 overflow-auto">
+                <h1 class="text-3xl font-bold mb-6">Panel de Control</h1>
+
+                <!-- GRAFICOS -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                    <h2 class="text-lg font-semibold mb-2">Ventas por Mes</h2>
+                    <canvas id="graficoVentas"></canvas>
                     </div>
-                    <div class="w-full lg:w-1/2 pl-0 lg:pl-2 mt-12 lg:mt-0">
-                        <p class="text-xl pb-3 flex items-center">
-                            <i class="fas fa-check mr-3"></i> Resolved Reports
-                        </p>
-                        <div class="p-6 bg-white">
-                            <canvas id="chartTwo" width="400" height="200"></canvas>
-                        </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                    <h2 class="text-lg font-semibold mb-2">Pedidos por Departamento</h2>
+                    <canvas id="graficoDepartamentos"></canvas>
                     </div>
                 </div>
-    
-                <div class="w-full mt-12">
-                    <p class="text-xl pb-3 flex items-center">
-                        <i class="fas fa-list mr-3"></i> Latest Reports
-                    </p>
-                    <div class="bg-white overflow-auto">
-                        <table class="min-w-full bg-white">
-                            <thead class="bg-gray-800 text-white">
-                                <tr>
-                                    <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Name</th>
-                                    <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Last name</th>
-                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Phone</th>
-                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Email</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-700">
-                                <tr>
-                                    <td class="w-1/3 text-left py-3 px-4">Lian</td>
-                                    <td class="w-1/3 text-left py-3 px-4">Smith</td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:622322662">622322662</a></td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:jonsmith@mail.com">jonsmith@mail.com</a></td>
-                                </tr>
-                                <tr class="bg-gray-200">
-                                    <td class="w-1/3 text-left py-3 px-4">Emma</td>
-                                    <td class="w-1/3 text-left py-3 px-4">Johnson</td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:622322662">622322662</a></td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:jonsmith@mail.com">jonsmith@mail.com</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="w-1/3 text-left py-3 px-4">Oliver</td>
-                                    <td class="w-1/3 text-left py-3 px-4">Williams</td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:622322662">622322662</a></td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:jonsmith@mail.com">jonsmith@mail.com</a></td>
-                                </tr>
-                                <tr class="bg-gray-200">
-                                    <td class="w-1/3 text-left py-3 px-4">Isabella</td>
-                                    <td class="w-1/3 text-left py-3 px-4">Brown</td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:622322662">622322662</a></td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:jonsmith@mail.com">jonsmith@mail.com</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="w-1/3 text-left py-3 px-4">Lian</td>
-                                    <td class="w-1/3 text-left py-3 px-4">Smith</td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:622322662">622322662</a></td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:jonsmith@mail.com">jonsmith@mail.com</a></td>
-                                </tr>
-                                <tr class="bg-gray-200">
-                                    <td class="w-1/3 text-left py-3 px-4">Emma</td>
-                                    <td class="w-1/3 text-left py-3 px-4">Johnson</td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:622322662">622322662</a></td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:jonsmith@mail.com">jonsmith@mail.com</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="w-1/3 text-left py-3 px-4">Oliver</td>
-                                    <td class="w-1/3 text-left py-3 px-4">Williams</td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:622322662">622322662</a></td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:jonsmith@mail.com">jonsmith@mail.com</a></td>
-                                </tr>
-                                <tr class="bg-gray-200">
-                                    <td class="w-1/3 text-left py-3 px-4">Isabella</td>
-                                    <td class="w-1/3 text-left py-3 px-4">Brown</td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:622322662">622322662</a></td>
-                                    <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:jonsmith@mail.com">jonsmith@mail.com</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+                <!-- LISTAS -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                    <h2 class="text-lg font-semibold mb-2">Productos más vendidos</h2>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100">
+                        <tr>
+                            <th class="p-2 text-left">Producto</th>
+                            <th class="p-2 text-center">Vendidos</th>
+                            <th class="p-2 text-center">%</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tablaProductos"></tbody>
+                    </table>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                    <h2 class="text-lg font-semibold mb-2">Clientes frecuentes</h2>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100">
+                        <tr>
+                            <th class="p-2 text-left">Cliente</th>
+                            <th class="p-2 text-center">Pedidos</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tablaClientes"></tbody>
+                    </table>
                     </div>
                 </div>
             </main>
-    
-            <footer class="w-full bg-white text-right p-4">
-                Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">David Grzyb</a>.
-            </footer>
         </div>
-        
     </div>
 
     <!-- AlpineJS -->
@@ -178,81 +131,63 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
 
     <script>
-        var chartOne = document.getElementById('chartOne');
-        var myChart = new Chart(chartOne, {
+        async function cargarDashboard() {
+        try {
+            // --- Ventas por mes ---
+            const vRes = await fetch('/MAYWATEXTIL/api/admin/dashboard/ventas_mes.php');
+            const ventas = await vRes.json();
+            new Chart(document.getElementById('graficoVentas'), {
             type: 'bar',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ventas.map(v => v.mes),
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
+                label: 'Total S/',
+                data: ventas.map(v => v.total_ventas),
+                backgroundColor: '#7B2CBF'
                 }]
             },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
 
-        var chartTwo = document.getElementById('chartTwo');
-        var myLineChart = new Chart(chartTwo, {
-            type: 'line',
+            // --- Pedidos por departamento ---
+            const dRes = await fetch('/MAYWATEXTIL/api/admin/dashboard/pedidos_departamento.php');
+            const dep = await dRes.json();
+            new Chart(document.getElementById('graficoDepartamentos'), {
+            type: 'pie',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: dep.map(d => d.departamento),
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
+                data: dep.map(d => d.total_pedidos),
+                backgroundColor: ['#9D4EDD','#7B2CBF','#5A189A','#3C096C','#240046']
                 }]
             },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
+            options: { responsive: true }
+            });
+
+            // --- Productos top ---
+            const pRes = await fetch('/MAYWATEXTIL/api/admin/dashboard/productos_top.php');
+            const productos = await pRes.json();
+            document.getElementById('tablaProductos').innerHTML = productos.map(p => `
+            <tr>
+                <td class="p-2">${p.nombre_producto}</td>
+                <td class="p-2 text-center">${p.total_vendidos}</td>
+                <td class="p-2 text-center">${p.porcentaje}%</td>
+            </tr>`).join('');
+
+            // --- Clientes top ---
+            const cRes = await fetch('/MAYWATEXTIL/api/admin/dashboard/clientes_top.php');
+            const clientes = await cRes.json();
+            document.getElementById('tablaClientes').innerHTML = clientes.map(c => `
+            <tr>
+                <td class="p-2">${c.cliente}</td>
+                <td class="p-2 text-center">${c.total_pedidos}</td>
+            </tr>`).join('');
+
+        } catch (e) {
+            console.error('Error cargando dashboard:', e);
+        }
+        }
+        window.addEventListener('DOMContentLoaded', cargarDashboard);
     </script>
 </body>
 </html>

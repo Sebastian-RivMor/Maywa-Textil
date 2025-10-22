@@ -41,6 +41,10 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
       <a href="producto.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
         <i class="fas fa-sticky-note mr-3"></i> Añadir Producto
       </a>
+        <a href="/MAYWATEXTIL/admin/pedidos.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-sticky-note mr-3"></i>
+                Pedidos
+        </a>
     </nav>
   </aside>
 

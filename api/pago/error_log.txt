@@ -1,0 +1,58 @@
+[22-Oct-2025 21:27:14 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "13",
+        "cantidad": 1,
+        "precio": 780
+    }
+]
+[22-Oct-2025 21:27:14 Europe/Berlin] Error en procesar.php: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'bd_maywa1.carrito' doesn't exist
+[22-Oct-2025 21:31:34 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "13",
+        "cantidad": 1,
+        "precio": 780
+    }
+]
+[22-Oct-2025 21:33:58 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "13",
+        "cantidad": 1,
+        "precio": 780
+    },
+    {
+        "id_producto": "11",
+        "cantidad": 1,
+        "precio": 450
+    }
+]
+[22-Oct-2025 21:55:41 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "13",
+        "cantidad": 4,
+        "precio": 780
+    }
+]
+[22-Oct-2025 22:47:51 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "13",
+        "cantidad": 1,
+        "precio": 780
+    },
+    {
+        "id_producto": "11",
+        "cantidad": 1,
+        "precio": 450
+    },
+    {
+        "id_producto": "6",
+        "cantidad": 1,
+        "precio": 200
+    }
+]
+[22-Oct-2025 22:59:29 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "10",
+        "cantidad": 1,
+        "precio": 275
+    }
+]

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-10-2025 a las 03:49:21
+-- Tiempo de generación: 22-10-2025 a las 17:48:00
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `bd_maywa1`
+-- Base de datos: `bd_maywa`
 --
 
 -- --------------------------------------------------------
@@ -182,6 +182,24 @@ CREATE TABLE `tb_envio` (
   `estado_envio` enum('pendiente','enviado','entregado','fallido') DEFAULT 'pendiente',
   `fecha_envio` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Disparadores `tb_envio`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_auto_direccion_envio` BEFORE INSERT ON `tb_envio` FOR EACH ROW BEGIN
+  DECLARE v_direccion VARCHAR(255);
+  
+  -- Obtener la dirección del pedido asociado
+  SELECT direccion_entrega INTO v_direccion
+  FROM tb_pedido
+  WHERE id_pedido = NEW.id_pedido;
+  
+  -- Copiar la dirección al nuevo envío
+  SET NEW.direccion_envio = v_direccion;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -407,7 +425,8 @@ ALTER TABLE `tb_detalle_pedido`
 --
 ALTER TABLE `tb_envio`
   ADD PRIMARY KEY (`id_envio`),
-  ADD KEY `id_pedido` (`id_pedido`);
+  ADD KEY `id_pedido` (`id_pedido`),
+  ADD KEY `fk_envio_direccion` (`direccion_envio`);
 
 --
 -- Indices de la tabla `tb_material`
@@ -428,6 +447,7 @@ ALTER TABLE `tb_pago`
 --
 ALTER TABLE `tb_pedido`
   ADD PRIMARY KEY (`id_pedido`),
+  ADD UNIQUE KEY `uq_direccion_entrega` (`direccion_entrega`),
   ADD KEY `id_usuario` (`id_usuario`),
   ADD KEY `id_departamento_envio` (`id_departamento_envio`);
 
@@ -579,6 +599,7 @@ ALTER TABLE `tb_detalle_pedido`
 -- Filtros para la tabla `tb_envio`
 --
 ALTER TABLE `tb_envio`
+  ADD CONSTRAINT `fk_envio_direccion` FOREIGN KEY (`direccion_envio`) REFERENCES `tb_pedido` (`direccion_entrega`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tb_envio_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `tb_pedido` (`id_pedido`) ON DELETE CASCADE;
 
 --

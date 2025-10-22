@@ -89,12 +89,16 @@ $total = $_SESSION['total_carrito'] ?? 0;
 
     <!-- Botón: Pagar -->
     <div class="text-center">
-      <button id="btnPagar"
-        class="w-full py-3 rounded-full bg-gradient-to-r from-[#9D4EDD] to-[#7B2CBF] hover:from-[#7B2CBF] hover:to-[#5A189A]
-               font-semibold text-white text-lg shadow-md transition">
+      <button onclick="openPagoModal()"
+              class="w-full py-3 rounded-full bg-gradient-to-r from-[#9D4EDD] to-[#7B2CBF] hover:from-[#7B2CBF] hover:to-[#5A189A]
+                    font-semibold text-white text-lg shadow-md transition">
         Pagar
       </button>
     </div>
+
+    <?php include __DIR__ . '/Modal_Pago.php'; ?>
+
+
   </div>
 </section>
 

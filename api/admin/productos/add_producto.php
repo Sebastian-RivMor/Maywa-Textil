@@ -28,7 +28,8 @@ try {
     $descripcion_producto = $_POST['descripcion_completa'] ?? '';
     $precio = $_POST['precio'] ?? null;
     $stock  = $_POST['stock'] ?? null;
-    $estado_producto = 'Disponible';
+    $estado_producto = ($stock <= 2) ? 'Agotado' : 'Disponible';
+
 
     // Validar campos requeridos
     if (!$id_comunidad || !$id_categoria || !$nombre_producto || !$precio || !$stock) {
@@ -68,6 +69,7 @@ try {
         (id_comunidad, id_categoria, id_material, nombre_producto, descripcion_producto, descripcion_corta, precio, stock, foto_url, estado_producto)
         VALUES (:id_comunidad, :id_categoria, :id_material, :nombre_producto, :descripcion_producto, :descripcion_corta, :precio, :stock, :foto_url, :estado_producto)";
 
+
     $stmt = $pdo->prepare($sql);
 
     $stmt->execute([
@@ -80,7 +82,7 @@ try {
         ':precio' => $precio,
         ':stock' => $stock,
         ':foto_url' => $foto_url,
-        ':estado_producto' => $estado_producto
+        ':estado_producto' => $estado_producto // Cambia a dinámico
     ]);
 
     $response['success'] = true;

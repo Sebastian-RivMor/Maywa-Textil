@@ -18,7 +18,7 @@ try {
         throw new Exception("Error de conexión con la base de datos (PDO no definido).");
     }
 
-    // Consulta SQL completa con LEFT JOIN
+    // Consulta SQL con lógica para determinar el estado del producto
     $sql = "SELECT 
                 p.id_producto,
                 p.nombre_producto,
@@ -27,7 +27,11 @@ try {
                 p.precio,
                 p.stock,
                 p.foto_url,
-                p.estado_producto,
+                -- Determina el estado del producto basado en el stock
+                CASE 
+                    WHEN p.stock <= 2 THEN 'Agotado' 
+                    ELSE 'Disponible' 
+                END AS estado_producto,
                 c.nombre_comunidad,
                 cat.nombre_categoria,
                 m.nombre_material
@@ -51,7 +55,7 @@ try {
             'precio'               => (float)$row['precio'],
             'stock'                => (int)$row['stock'],
             'foto_url'             => $row['foto_url'] ?: '',
-            'estado_producto'      => $row['estado_producto'],
+            'estado_producto'      => $row['estado_producto'],  // Estado calculado aquí
             'nombre_comunidad'     => $row['nombre_comunidad'] ?? '',
             'nombre_categoria'     => $row['nombre_categoria'] ?? '',
             'nombre_material'      => $row['nombre_material'] ?? ''

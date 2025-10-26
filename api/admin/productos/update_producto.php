@@ -13,7 +13,7 @@ try {
   $desc_comp = $_POST['descripcion_producto'] ?? '';
   $precio = $_POST['precio'] ?? 0;
   $stock = $_POST['stock'] ?? 0;
-  $estado = $_POST['estado_producto'] ?? 'Disponible';
+  $estado = ($stock <= 2) ? 'Agotado' : 'Disponible';
   $foto_url = '';
 
   if (!$id) throw new Exception("ID de producto no válido.");

@@ -130,6 +130,15 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
     <!-- ChartJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
 
+    <!-- Modal (popup) -->
+    <div id="stockModal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-gray-900 bg-opacity-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-1/3">
+            <h2 class="text-xl font-bold mb-4">¡ALERTA! POCO STOCK</h2>
+            <p id="stockMessage" class="text-lg mb-4">HAY POCO STOCK EN EL PRODUCTO: <span id="productName"></span></p>
+            <button id="closeModal" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Cerrar</button>
+        </div>
+    </div>
+
     <script>
         async function cargarDashboard() {
         try {
@@ -188,6 +197,35 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
         }
         }
         window.addEventListener('DOMContentLoaded', cargarDashboard);
+
+        // Función para verificar el stock de los productos y mostrar el popup si es necesario
+        async function verificarStockAlLoguearse() {
+            try {
+                const res = await fetch('/MAYWATEXTIL/api/admin/alerta/alerta.php');
+                const data = await res.json();
+
+                if (data.success) {
+                    // Si el stock es menor o igual a 2, mostrar el popup
+                    if (data.stock <= 2) {
+                        document.getElementById('productName').innerText = data.product_name;
+                        document.getElementById('stockMessage').innerText = `HAY POCO STOCK EN EL PRODUCTO: ${data.product_name}. LLENE MÁS STOCK`;
+                        document.getElementById('stockModal').classList.remove('hidden');
+                    }
+                } else {
+                    console.error(data.error);
+                }
+            } catch (error) {
+                console.error("Error al verificar el stock:", error);
+            }
+        }
+
+        // Función para cerrar el modal
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('stockModal').classList.add('hidden');
+        });
+
+        // Llamada a la función cuando se carga el Dashboard
+        window.addEventListener('DOMContentLoaded', verificarStockAlLoguearse);
     </script>
 </body>
 </html>

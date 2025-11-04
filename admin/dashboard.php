@@ -33,9 +33,12 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
             <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
-            <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+            <button 
+                class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center" 
+                id="btn-reporte">
                 <i class="fas fa-plus mr-3"></i> New Report
             </button>
+
         </div>
         <nav class="text-white text-base font-semibold pt-3">
             <a href="index.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
@@ -227,5 +230,16 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
         // Llamada a la función cuando se carga el Dashboard
         window.addEventListener('DOMContentLoaded', verificarStockAlLoguearse);
     </script>
+
+    <script>
+        // Si tu proyecto vive en http://localhost/MAYWATEXTIL/
+        const REPORT_URL = '/MAYWATEXTIL/api/admin/dashboard/generar_reporte.php';
+
+        document.getElementById('btn-reporte').addEventListener('click', () => {
+            window.open(REPORT_URL, '_blank');
+        });
+    </script>
+
+
 </body>
 </html>

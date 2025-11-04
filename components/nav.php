@@ -17,7 +17,7 @@ if (session_status() === PHP_SESSION_NONE) {
              style="width:65px;height:65px;">
       </a>
 
-      <!-- Bot贸n hamburguesa -->
+      <!-- Botón hamburguesa -->
       <button id="menuToggle" aria-label="Abrir men煤" aria-expanded="false"
         class="md:hidden inline-flex items-center justify-center p-2 rounded-md hover:bg-white/10 focus:outline-none">
         <svg id="iconOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -41,7 +41,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <!-- Botones / Usuario -->
       <div class="hidden md:flex items-center gap-2 relative">
         <?php if (isset($_SESSION['usuario'])): $u = $_SESSION['usuario']; ?>
-          <!-- Bot贸n de usuario con men煤 -->
+          <!-- Botón de usuario con menú -->
           <div class="relative">
             <button id="userMenuBtn"
                     class="flex items-center gap-2 rounded-3xl bg-[#9d4edd] hover:bg-[#b368ff] text-white shadow-lg shadow-fuchsia-900/30 px-6 py-3 transition"
@@ -52,10 +52,11 @@ if (session_status() === PHP_SESSION_NONE) {
               </svg>
             </button>
 
-            <!-- Men煤 desplegable -->
+            <!-- Menú desplegable -->
             <div id="userDropdown"
                  class="absolute right-0 mt-2 hidden bg-[#1E1B3A] text-white rounded-lg shadow-lg border border-white/10 w-48">
               <a href="/MAYWATEXTIL/api/auth/logout.php" class="block px-4 py-2 hover:bg-white/10">Cerrar sesión</a>
+              <a href="index.php?page=compras" class="block px-4 py-2 hover:bg-white/10">Compras</a>
             </div>
           </div>
         <?php else: ?>
@@ -74,7 +75,7 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
   </div>
 
-  <!-- Men煤 m贸vil -->
+  <!-- Menú movil -->
   <div id="mobileMenu" class="md:hidden hidden px-4 pb-3">
     <ul class="space-y-2 pt-2 border-t border-white/10">
       <li><a href="/categorias" class="block py-2 nav-link text-[18px]">Categorías</a></li>
@@ -110,7 +111,7 @@ if (session_status() === PHP_SESSION_NONE) {
   .nav-link:hover { color:#fff; }
   nav, body, main, header { border-radius:0; overflow:visible; }
 
-  /* 馃敡 Ajustes responsive */
+  /* Ajustes responsive */
   @media (max-width: 768px) {
     nav img { width: 40px !important; height: 40px !important; }
     .nav-link { font-size: 15px !important; }
@@ -139,7 +140,7 @@ if (session_status() === PHP_SESSION_NONE) {
       });
     }
 
-    // Men煤 del usuario (click)
+    // Menú del usuario (click)
     const userBtn = document.getElementById("userMenuBtn");
     const dropdown = document.getElementById("userDropdown");
 

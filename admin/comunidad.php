@@ -4,266 +4,282 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== "Admin") {
     header("Location: index.php");
     exit;
 }
+
+$nombreUsuario = $_SESSION['usuario']['nombre'] ?? 'Administrador';
+$currentPage   = 'comunidades'; // para marcar el menú activo
+$pageTitle     = 'Comunidades';
+$pageSubtitle  = 'Gestiona las comunidades artesanas asociadas a Maywa Textil.';
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Añadir Comunidad</title>
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+  <title>Comunidades | Maywa Textil</title>
+
+  <!-- Tailwind -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+
+  <!-- Font Awesome (ICONOS) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <!-- AlpineJS (v2) -->
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
   <style>
-    .bg-sidebar { background: #3d68ff; }
-    .cta-btn { color: #3d68ff; }
-    .active-nav-link { background: #1947ee; }
-    .nav-item:hover { background: #1947ee; }
+    @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+
+    :root {
+      --maywa-dark: #1b0033;
+      --maywa-primary: #7b2cbf;
+      --maywa-accent: #f72585;
+      --maywa-soft: #d06bff;
+    }
+
+    .font-family-karla { font-family: 'Karla', sans-serif; }
+
+    .bg-sidebar {
+      background: linear-gradient(to bottom, var(--maywa-dark), var(--maywa-primary));
+    }
+
+    .bg-header {
+      background: linear-gradient(to right, var(--maywa-dark), var(--maywa-primary));
+    }
+
+    .btn-maywa {
+      background: linear-gradient(to right, var(--maywa-primary), var(--maywa-accent));
+    }
+
+    .btn-maywa:hover {
+      filter: brightness(1.05);
+    }
+
+    .active-nav-link {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .account-link:hover {
+      background: var(--maywa-primary);
+      color: #fff;
+    }
   </style>
 </head>
 
-<body class="bg-gray-100 font-sans flex" x-data="{ openModal: false }">
-  <!-- Sidebar -->
-  <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
-    <div class="p-6">
-      <a href="#" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
-      <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-lg shadow-md hover:bg-gray-300 flex items-center justify-center">
-        <i class="fas fa-plus mr-3"></i> New Report
-      </button>
-    </div>
-    <nav class="text-white text-base font-semibold pt-3">
-      <a href="dashboard.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-        <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
-      </a>
-      <a href="/MAYWATEXTIL/admin/comunidad.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-table mr-3"></i>
-                Comunidad
-            </a>
-      <a href="producto.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-        <i class="fas fa-sticky-note mr-3"></i> Añadir Producto
-      </a>
-        <a href="/MAYWATEXTIL/admin/pedidos.php" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-sticky-note mr-3"></i>
-                Pedidos
-        </a>
-    </nav>
-  </aside>
+<body class="bg-gradient-to-br from-purple-900 via-purple-700 to-pink-600 font-family-karla flex">
 
-    <!-- Main content -->
-    <main class="w-full flex flex-col h-screen overflow-y-auto p-6"
-        x-data="{ openModal: false, comunidades: [], nombre: '', descripcion: '' }"
-        x-init="
-            // Cargar comunidades al iniciar
-            fetch('/MAYWATEXTIL/api/admin/comunidad/get_comunidades.php')
-            .then(res => res.json())
-            .then(data => comunidades = data);
-        ">
+  <?php include __DIR__ . '/sidebar.php'; ?>
 
-    <!-- Botón añadir -->
-    <div class="flex justify-end mb-6">
-        <button @click='openModal = true'
-                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md">
-        + Añadir Comunidad
-        </button>
-    </div>
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="w-full flex flex-col h-screen overflow-y-hidden"
+       x-data="comunidadesPage()"
+       x-init="cargarComunidades()">
 
-    <!-- Modal -->
-    <div x-show="openModal"
-        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-        x-transition>
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative"
-            @click.away="openModal = false">
-        
-        <div class="flex justify-between items-center border-b pb-2 mb-4">
-            <h2 class="text-lg font-bold text-gray-700">Nueva Comunidad</h2>
-            <button @click="openModal = false" class="text-gray-500 hover:text-gray-700 text-lg">&times;</button>
-        </div>
+    <?php include __DIR__ . '/header_admin.php'; ?>
 
-        <!-- Formulario dinámico -->
-        <form @submit.prevent="
-            fetch('/MAYWATEXTIL/api/admin/comunidad/add_comunidad.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre_comunidad: nombre, descripcion: descripcion })
-            })
-            .then(res => res.json())
-            .then(data => {
-            if (data.success) {
-                // limpiar inputs
-                nombre = ''; descripcion = '';
-                openModal = false;
-                // recargar tabla
-                fetch('/MAYWATEXTIL/api/admin/comunidad/get_comunidades.php')
-                .then(res => res.json())
-                .then(data => comunidades = data);
-            } else {
-                alert(data.error || 'Error al registrar comunidad');
-            }
-            });
-        " class="space-y-4">
-
-            <!-- ID autoincremental -->
+    <!-- CONTENIDO -->
+    <div class="w-full overflow-x-hidden border-t border-purple-200/40 flex flex-col">
+            <main class="flex-1 p-6 md:p-8 overflow-auto">
+        <div class="flex items-center justify-between mb-6">
             <div>
-            <label class="block text-sm font-semibold text-gray-600">ID Comunidad</label>
-            <input type="text" value="Auto" readonly
-                    class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-500">
+            <h1 class="text-3xl font-bold text-white drop-shadow-sm">Comunidades</h1>
+            <p class="text-purple-100 text-sm mt-1">
+                Registra y administra las comunidades artesanas con las que trabajas.
+            </p>
             </div>
-
-            <!-- Nombre -->
-            <div>
-            <label class="block text-sm font-semibold text-gray-600">Nombre de la comunidad</label>
-            <input type="text" x-model="nombre"
-                    class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200" required>
-            </div>
-
-            <!-- Descripción -->
-            <div>
-            <label class="block text-sm font-semibold text-gray-600">Descripción</label>
-            <textarea x-model="descripcion" rows="3"
-                        class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 resize-none" required></textarea>
-            </div>
-
-            <!-- Botón -->
-            <div class="flex justify-end">
-            <button type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md">
-                Añadir Comunidad
+            <button @click="openModal = true"
+                    class="btn-maywa text-white px-5 py-2 rounded-xl font-semibold shadow-lg flex items-center space-x-2 text-sm">
+            <i class="fa-solid fa-plus"></i>
+            <span>Nueva comunidad</span>
             </button>
-            </div>
-        </form>
         </div>
+
+        <!-- TABLA -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-800 flex items-center space-x-2">
+                <i class="fa-solid fa-people-roof text-purple-700"></i>
+                <span>Listado de comunidades</span>
+            </h2>
+            <span class="text-xs text-gray-500" x-text="comunidades.length + ' registradas'"></span>
+            </div>
+
+            <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+                <thead class="bg-purple-50 text-purple-700 text-xs uppercase">
+                <tr>
+                <th class="px-6 py-3">ID</th>
+                <th class="px-6 py-3">Nombre</th>
+                <th class="px-6 py-3">Descripción</th>
+                <th class="px-6 py-3 text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-gray-700">
+                <template x-if="comunidades.length === 0">
+                <tr>
+                    <td colspan="4" class="px-6 py-5 text-center text-gray-400 text-sm">
+                    Aún no hay comunidades registradas.
+                    </td>
+                </tr>
+                </template>
+
+                <template x-for="com in comunidades" :key="com.id_comunidad">
+                <tr class="hover:bg-purple-50/60">
+                    <td class="px-6 py-3" x-text="com.id_comunidad"></td>
+                    <td class="px-6 py-3 font-medium" x-text="com.nombre_comunidad"></td>
+                    <td class="px-6 py-3" x-text="com.descripcion"></td>
+                    <td class="px-6 py-3 text-center">
+                    <button
+                        @click="eliminarComunidad(com.id_comunidad)"
+                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-xs font-semibold shadow inline-flex items-center space-x-1">
+                        <i class="fa-solid fa-trash"></i>
+                        <span>Eliminar</span>
+                    </button>
+                    </td>
+                </tr>
+                </template>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </main>
     </div>
 
-    <!-- Tabla de comunidades -->
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden mt-4">
-    <table class="min-w-full text-left">
-        <thead class="bg-gray-200 text-gray-700 text-sm uppercase">
-        <tr>
-            <th class="px-6 py-3">ID Comunidad</th>
-            <th class="px-6 py-3">Nombre</th>
-            <th class="px-6 py-3">Descripción</th>
-            <th class="px-6 py-3 text-center">Acciones</th>
-        </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 text-gray-700">
-        <!-- Render dinámico con Alpine -->
-        <template x-for="com in comunidades" :key="com.id_comunidad">
-            <tr class="hover:bg-gray-50">
-            <td class="px-6 py-3" x-text="com.id_comunidad"></td>
-            <td class="px-6 py-3" x-text="com.nombre_comunidad"></td>
-            <td class="px-6 py-3" x-text="com.descripcion"></td>
-            <td class="px-6 py-3 text-center">
-                <button
-                @click="
-                    if (confirm('¿Seguro que deseas eliminar esta comunidad?')) {
-                    fetch('/MAYWATEXTIL/api/admin/comunidad/delete_comunidad.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id_comunidad: com.id_comunidad })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                        comunidades = comunidades.filter(c => c.id_comunidad != com.id_comunidad);
-                        } else {
-                        alert(data.error || 'Error al eliminar');
-                        }
-                    });
-                    }
-                "
-                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-semibold shadow">
-                Eliminar
-                </button>
-            </td>
-            </tr>
-        </template>
-        </tbody>
-    </table>
+    <!-- MODAL NUEVA COMUNIDAD -->
+    <div x-show="openModal"
+         class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+         x-transition>
+      <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-lg p-6 relative"
+           @click.away="openModal = false">
+        <div class="flex justify-between items-center border-b pb-2 mb-4">
+          <h2 class="text-lg font-bold text-gray-800 flex items-center space-x-2">
+            <i class="fa-solid fa-people-group text-purple-700"></i>
+            <span>Nueva comunidad</span>
+          </h2>
+          <button @click="openModal = false"
+                  class="text-gray-500 hover:text-gray-700 text-xl leading-none">&times;</button>
+        </div>
+
+        <form @submit.prevent="guardarComunidad" class="space-y-4">
+          <!-- ID -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 mb-1">ID Comunidad</label>
+            <input type="text" value="Auto"
+                   readonly
+                   class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-500 text-sm">
+          </div>
+
+          <!-- Nombre -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre de la comunidad</label>
+            <input type="text" x-model="nombre"
+                   class="w-full border rounded-lg px-3 py-2 text-sm focus:ring focus:ring-purple-200 focus:border-purple-400 outline-none"
+                   placeholder="Ej. Asociación de Mujeres Artesanas Makyss"
+                   required>
+          </div>
+
+          <!-- Descripción -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Descripción</label>
+            <textarea x-model="descripcion" rows="3"
+                      class="w-full border rounded-lg px-3 py-2 text-sm focus:ring focus:ring-purple-200 focus:border-purple-400 outline-none resize-none"
+                      placeholder="Breve descripción de la comunidad, su origen, técnicas textiles, etc."
+                      required></textarea>
+          </div>
+
+          <!-- Botones -->
+          <div class="flex justify-end space-x-3 pt-2">
+            <button type="button"
+                    @click="openModal = false"
+                    class="px-4 py-2 rounded-xl border text-gray-600 hover:bg-gray-100 text-sm">
+              Cancelar
+            </button>
+            <button type="submit"
+                    class="btn-maywa text-white px-6 py-2 rounded-xl font-semibold shadow-md text-sm flex items-center space-x-2">
+              <i class="fa-solid fa-check"></i>
+              <span>Guardar</span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    </main>
 
-  <!-- AlpineJS -->
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-    <!-- Font Awesome -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
-    <!-- ChartJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+  </div> <!-- /contenedor principal -->
 
-    <script>
-        var chartOne = document.getElementById('chartOne');
-        var myChart = new Chart(chartOne, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
+  <script>
+    function comunidadesPage() {
+      return {
+        openModal: false,
+        comunidades: [],
+        nombre: '',
+        descripcion: '',
+
+        async cargarComunidades() {
+          try {
+            const res = await fetch('../api/admin/comunidad/get_comunidades.php');
+            const data = await res.json();
+            this.comunidades = Array.isArray(data) ? data : [];
+          } catch (e) {
+            console.error('Error al cargar comunidades:', e);
+          }
+        },
+
+        async guardarComunidad() {
+          try {
+            const res = await fetch('../api/admin/comunidad/add_comunidad.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                nombre_comunidad: this.nombre,
+                descripcion: this.descripcion
+              })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              this.nombre = '';
+              this.descripcion = '';
+              this.openModal = false;
+              await this.cargarComunidades();
+            } else {
+              alert(data.error || 'Error al registrar comunidad');
             }
-        });
+          } catch (e) {
+            console.error('Error guardando comunidad:', e);
+            alert('Ocurrió un error al registrar la comunidad');
+          }
+        },
 
-        var chartTwo = document.getElementById('chartTwo');
-        var myLineChart = new Chart(chartTwo, {
-            type: 'line',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
+        async eliminarComunidad(id) {
+          if (!confirm('¿Seguro que deseas eliminar esta comunidad?')) return;
+
+          try {
+            const res = await fetch('../api/admin/comunidad/delete_comunidad.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id_comunidad: id })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              this.comunidades = this.comunidades.filter(c => c.id_comunidad != id);
+            } else {
+              alert(data.error || 'Error al eliminar comunidad');
             }
-        });
-    </script>
+          } catch (e) {
+            console.error('Error eliminando comunidad:', e);
+            alert('Ocurrió un error al eliminar la comunidad');
+          }
+        }
+      }
+    }
+</script>
+
 </body>
 </html>

@@ -49,54 +49,45 @@ $productos_pagina = array_slice($productos, $inicio, $productos_por_pagina);
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 px-5 md:px-8 pb-8 pt-6">
 
       <!-- SIDEBAR FILTROS -->
-      <aside class="md:col-span-1 space-y-6">
+      <aside class="md:col-span-1 space-y-6" x-data="filters()">
+        <!-- Categorías -->
         <div x-data="{ open: true }" class="bg-[#2a1653] rounded-lg border border-white/10">
-          <button @click="open = !open"
-            class="w-full flex items-center justify-between px-3 py-2 text-white/90 font-semibold">
+          <button @click="open = !open" class="w-full flex items-center justify-between px-3 py-2 text-white/90 font-semibold">
             <span>Categorías</span>
-            <span :class="open ? 'rotate-180 text-[#C77DFF]' : ''"
-              class="transform transition-transform text-white/70">▾</span>
+            <span :class="open ? 'rotate-180 text-[#C77DFF]' : ''" class="transform transition-transform text-white/70">▾</span>
           </button>
           <div x-show="open" x-transition class="px-4 pb-3 text-sm text-white/90 space-y-2 border-t border-white/10">
-            <a href="#" class="block hover:text-[#C77DFF]">Chompas</a>
-            <a href="#" class="block hover:text-[#C77DFF]">Ponchos</a>
-            <a href="#" class="block hover:text-[#C77DFF]">Carteras</a>
-            <a href="#" class="block hover:text-[#C77DFF]">Bufandas</a>
-            <a href="#" class="block hover:text-[#C77DFF]">Casacas</a>
+            <template x-for="categoria in categorias" :key="categoria.id_categoria">
+              <a href="#" @click="applyFilter('categoria', categoria.id_categoria)" class="block hover:text-[#C77DFF]" x-text="categoria.nombre_categoria"></a>
+            </template>
           </div>
         </div>
-        <!-- Precio -->
-        <div x-data="{ open: false }" class="bg-[#2a1653] rounded-lg border border-white/10">
-            <button @click="open = !open"
-            class="w-full flex items-center justify-between px-3 py-2 text-white/90 font-semibold">
-            <span>Precio</span>
-            <span :class="open ? 'rotate-180 text-[#C77DFF]' : ''"
-                    class="transform transition-transform text-white/70">▾</span>
-            </button>
-            <div x-show="open" x-transition
-                class="px-4 pb-3 text-sm text-white/90 space-y-2 border-t border-white/10">
-            <a href="#" class="block hover:text-[#C77DFF]">Todos los precios</a>
-            <a href="#" class="block hover:text-[#C77DFF]">S/. 30 - S/. 70</a>
-            <a href="#" class="block hover:text-[#C77DFF]">S/. 71 - S/. 111</a>
-            <a href="#" class="block hover:text-[#C77DFF]">S/. 112 - S/. 152</a>
-            <a href="#" class="block hover:text-[#C77DFF]">Más de S/. 152</a>
-            </div>
-        </div>
+
         <!-- Material -->
         <div x-data="{ open: false }" class="bg-[#2a1653] rounded-lg border border-white/10">
-            <button @click="open = !open"
-            class="w-full flex items-center justify-between px-3 py-2 text-white/90 font-semibold">
+          <button @click="open = !open" class="w-full flex items-center justify-between px-3 py-2 text-white/90 font-semibold">
             <span>Material</span>
-            <span :class="open ? 'rotate-180 text-[#C77DFF]' : ''"
-                    class="transform transition-transform text-white/70">▾</span>
-            </button>
-            <div x-show="open" x-transition
-                class="px-4 pb-3 text-sm text-white/90 space-y-2 border-t border-white/10">
-            <a href="#" class="block hover:text-[#C77DFF]">Todos los materiales</a>
-            <a href="#" class="block hover:text-[#C77DFF]">Alpaca</a>
-            <a href="#" class="block hover:text-[#C77DFF]">Seda</a>
-            <a href="#" class="block hover:text-[#C77DFF]">Lana</a>
-            </div>
+            <span :class="open ? 'rotate-180 text-[#C77DFF]' : ''" class="transform transition-transform text-white/70">▾</span>
+          </button>
+          <div x-show="open" x-transition class="px-4 pb-3 text-sm text-white/90 space-y-2 border-t border-white/10">
+            <template x-for="material in materiales" :key="material.id_material">
+              <a href="#" @click="applyFilter('material', material.id_material)" class="block hover:text-[#C77DFF]" x-text="material.nombre_material"></a>
+            </template>
+          </div>
+        </div>
+
+        <!-- Precio -->
+        <div x-data="{ open: false }" class="bg-[#2a1653] rounded-lg border border-white/10">
+          <button @click="open = !open" class="w-full flex items-center justify-between px-3 py-2 text-white/90 font-semibold">
+            <span>Precio</span>
+            <span :class="open ? 'rotate-180 text-[#C77DFF]' : ''" class="transform transition-transform text-white/70">▾</span>
+          </button>
+          <div x-show="open" x-transition class="px-4 pb-3 text-sm text-white/90 space-y-2 border-t border-white/10">
+            <a href="#" @click="applyFilter('precio', '30-70')" class="block hover:text-[#C77DFF]">S/. 30 - S/. 70</a>
+            <a href="#" @click="applyFilter('precio', '71-111')" class="block hover:text-[#C77DFF]">S/. 71 - S/. 111</a>
+            <a href="#" @click="applyFilter('precio', '112-152')" class="block hover:text-[#C77DFF]">S/. 112 - S/. 152</a>
+            <a href="#" @click="applyFilter('precio', '152-9999')" class="block hover:text-[#C77DFF]">Más de S/. 152</a>
+          </div>
         </div>
       </aside>
 
@@ -138,3 +129,64 @@ $productos_pagina = array_slice($productos, $inicio, $productos_por_pagina);
     </div>
   </div>
 </div>
+<script>
+  function filters() {
+    return {
+      categorias: [], // Inicializamos la lista de categorías vacía
+      materiales: [], // Inicializamos la lista de materiales vacía
+      productos: [],  // Lista de productos
+      async fetchFiltersAndProducts() {
+        const response = await fetch('/api/admin/productos/filtrar.php?categoria=&material=&precio=');
+        const data = await response.json();
+        
+        if (data.categorias && data.materiales) {
+          this.categorias = data.categorias;
+          this.materiales = data.materiales;
+          this.updateProductGrid(data.productos); // Actualizar productos filtrados
+        } else {
+          console.error("No se pudieron cargar las categorías o materiales.");
+        }
+      },
+      updateProductGrid(productos) {
+        let productosHTML = '';
+        productos.forEach(producto => {
+          productosHTML += `
+            <div class="producto">
+              <img src="${producto.foto_url}" alt="${producto.nombre_producto}" />
+              <h3>${producto.nombre_producto}</h3>
+              <p>${producto.descripcion_corta}</p>
+              <p>Precio: S/. ${producto.precio}</p>
+            </div>
+          `;
+        });
+
+        document.getElementById("productos-grid").innerHTML = productosHTML;
+      },
+      applyFilter(filterType, value) {
+        const url = new URL(window.location.href);
+        
+        if (value) {
+          url.searchParams.set(filterType, value);
+        } else {
+          url.searchParams.delete(filterType); // Eliminar parámetro vacío
+        }
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            this.updateProductGrid(data.productos); // Actualizamos los productos con los filtros aplicados
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      },
+      init() {
+        this.fetchFiltersAndProducts(); // Cargar filtros y productos al iniciar
+      }
+    };
+  }
+
+  document.addEventListener('alpine:init', () => {
+    Alpine.start();
+  });
+</script>

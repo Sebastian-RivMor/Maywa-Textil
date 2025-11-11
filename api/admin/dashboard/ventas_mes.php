@@ -6,8 +6,10 @@ try {
   $stmt = $pdo->query("
     SELECT 
       DATE_FORMAT(fecha_pedido, '%Y-%m') AS mes,
-      SUM(total) AS total_ventas
+      SUM(total) AS total_ventas,
+      COUNT(*) AS total_pedidos
     FROM tb_pedido
+    WHERE estado_pedido != 'cancelado'  -- Excluir pedidos cancelados
     GROUP BY mes
     ORDER BY mes ASC
   ");

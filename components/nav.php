@@ -31,7 +31,6 @@ if (session_status() === PHP_SESSION_NONE) {
       <!-- Links desktop -->
       <div class="hidden md:flex flex-1 justify-center">
         <ul class="flex items-center gap-10">
-          <li><a href="/categorias" class="nav-link text-[18px]">Categorías</a></li>
           <li><a href="index.php?page=productos" class="nav-link text-[18px]">Productos</a></li>
           <li><a href="index.php?page=comunidades" class="nav-link text-[18px]">Comunidades</a></li>
           <li><a href="index.php?page=somos" class="nav-link text-[18px]">Quiénes Somos</a></li>
@@ -78,7 +77,6 @@ if (session_status() === PHP_SESSION_NONE) {
   <!-- Menú movil -->
   <div id="mobileMenu" class="md:hidden hidden px-4 pb-3">
     <ul class="space-y-2 pt-2 border-t border-white/10">
-      <li><a href="/categorias" class="block py-2 nav-link text-[18px]">Categorías</a></li>
       <li><a href="index.php?page=productos" class="block py-2 nav-link text-[18px]">Productos</a></li>
       <li><a href="index.php?page=comunidades" class="block py-2 nav-link text-[18px]">Comunidades</a></li>
       <li><a href="index.php?page=somos" class="block py-2 nav-link text-[18px]">Quiénes Somos</a></li>

@@ -75,3 +75,17 @@
         "precio": 450
     }
 ]
+[04-Nov-2025 20:33:33 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "13",
+        "cantidad": 1,
+        "precio": 780
+    }
+]
+[04-Nov-2025 20:36:47 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "13",
+        "cantidad": 1,
+        "precio": 780
+    }
+]

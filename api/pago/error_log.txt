@@ -89,3 +89,26 @@
         "precio": 780
     }
 ]
+[12-Nov-2025 01:55:24 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "5",
+        "cantidad": 2,
+        "precio": 200
+    }
+]
+[12-Nov-2025 01:57:17 Europe/Berlin] Error en procesar.php: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`bd_maywa1`.`tb_pedido`, CONSTRAINT `tb_pedido_ibfk_2` FOREIGN KEY (`id_departamento_envio`) REFERENCES `tb_departamento` (`id_departamento`))
+[12-Nov-2025 01:57:47 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "13",
+        "cantidad": 1,
+        "precio": 780
+    }
+]
+[12-Nov-2025 02:09:05 Europe/Berlin] Error en procesar.php: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'total_pedido' in 'field list'
+[12-Nov-2025 02:09:32 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "2",
+        "cantidad": 1,
+        "precio": 152
+    }
+]

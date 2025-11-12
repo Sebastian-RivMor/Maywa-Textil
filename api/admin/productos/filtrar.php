@@ -11,6 +11,7 @@ require_once '../../../config/db.php';
 $categoria = isset($_GET['categoria']) ? $_GET['categoria'] : '';
 $material = isset($_GET['material']) ? $_GET['material'] : '';
 $precio = isset($_GET['precio']) ? $_GET['precio'] : '';
+$buscar = isset($_GET['buscar']) ? $_GET['buscar'] : ''; // Añadido parámetro de búsqueda
 
 // Consultar las categorías disponibles
 $query_categoria = "SELECT * FROM tb_categoria";
@@ -45,6 +46,11 @@ if ($precio) {
     $query_producto .= " AND p.precio BETWEEN :precio_min AND :precio_max";
 }
 
+// Agregar filtro de búsqueda por nombre del producto
+if ($buscar) {
+    $query_producto .= " AND p.nombre_producto LIKE :buscar";
+}
+
 // Preparar la consulta
 $stmt_producto = $pdo->prepare($query_producto);
 
@@ -60,6 +66,12 @@ if ($material) {
 if ($precio) {
     $stmt_producto->bindParam(':precio_min', $precio_rangos[0]);
     $stmt_producto->bindParam(':precio_max', $precio_rangos[1]);
+}
+
+// Vincular el filtro de búsqueda
+if ($buscar) {
+    $buscarTerm = '%' . $buscar . '%'; // Agregar los comodines para LIKE
+    $stmt_producto->bindParam(':buscar', $buscarTerm);
 }
 
 // Ejecutar la consulta

@@ -74,17 +74,6 @@ try {
     $stmt_envio = $pdo->prepare($sql_envio);
     $stmt_envio->execute([$id_pedido, $direccion]);
 
-    // Vaciar carrito (si lo tienes)
-    // if (isset($id_usuario)) {
-    //     $pdo->prepare("DELETE FROM carrito WHERE id_usuario = ?")->execute([$id_usuario]);
-    // }
-
-    try {
-        // limpia la sesión del carrito
-        @file_get_contents("http://localhost/MAYWATEXTIL/api/cart/clear.php");
-    } catch (Throwable $e) {
-        error_log("No se pudo limpiar el carrito visual: " . $e->getMessage());
-    }
     echo json_encode([
         "success" => true,
         "msg" => "✅ Pago procesado y pedido registrado correctamente",

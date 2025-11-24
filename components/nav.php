@@ -32,7 +32,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <div class="hidden md:flex flex-1 justify-center">
         <ul class="flex items-center gap-10">
           <li><a href="index.php?page=productos" class="nav-link text-[18px]">Productos</a></li>
-          <li><a href="index.php?page=comunidades" class="nav-link text-[18px]">Comunidades</a></li>
+          <li><a href="index.php?page=conoce" class="nav-link text-[18px]">Comunidades</a></li>
           <li><a href="index.php?page=somos" class="nav-link text-[18px]">Quiénes Somos</a></li>
         </ul>
       </div>

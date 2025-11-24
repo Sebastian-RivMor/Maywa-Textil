@@ -112,3 +112,66 @@
         "precio": 152
     }
 ]
+[25-Nov-2025 00:10:50 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "2",
+        "cantidad": 1,
+        "precio": 152
+    }
+]
+[25-Nov-2025 00:21:39 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "4",
+        "cantidad": 1,
+        "precio": 315
+    }
+]
+[25-Nov-2025 00:22:17 Europe/Berlin] Error en procesar.php: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'srfsryf' for key 'uq_direccion_entrega'
+[25-Nov-2025 00:22:25 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "4",
+        "cantidad": 1,
+        "precio": 315
+    }
+]
+[25-Nov-2025 00:22:58 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "4",
+        "cantidad": 1,
+        "precio": 315
+    }
+]
+[25-Nov-2025 00:24:03 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "4",
+        "cantidad": 1,
+        "precio": 315
+    }
+]
+[25-Nov-2025 00:24:19 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "4",
+        "cantidad": 1,
+        "precio": 315
+    }
+]
+[25-Nov-2025 00:29:51 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "4",
+        "cantidad": 1,
+        "precio": 315
+    },
+    {
+        "id_producto": "6",
+        "cantidad": 1,
+        "precio": 200
+    }
+]
+[25-Nov-2025 00:30:19 Europe/Berlin] DEBUG PRODUCTOS: [
+    {
+        "id_producto": "5",
+        "cantidad": 6,
+        "precio": 200
+    }
+]
+[25-Nov-2025 00:35:06 Europe/Berlin] Error en procesar.php: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`bd_maywa1`.`tb_pedido`, CONSTRAINT `tb_pedido_ibfk_2` FOREIGN KEY (`id_departamento_envio`) REFERENCES `tb_departamento` (`id_departamento`))
